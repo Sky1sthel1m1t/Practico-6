@@ -1,17 +1,12 @@
 package Modelo;
 
 public class ArchivoCarpeta {
-    private String path;
-    private String nombre;
-    private String nombreCodificado;
-    private int tamano;
-    private boolean tipo;
+    protected String nombre;
+    protected String nombreCodificado;
+    protected String tipo;
+    protected String tamaño;
 
-    public ArchivoCarpeta(String path, String nombre, int tamano, boolean tipo) {
-        this.path = path;
-        this.nombre = nombre;
-        this.tamano = tamano;
-        this.tipo = tipo;
+    public ArchivoCarpeta() {
         codificar();
     }
 
@@ -27,14 +22,6 @@ public class ArchivoCarpeta {
         }
 
         this.nombreCodificado = codigo;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getNombre() {
@@ -53,19 +40,19 @@ public class ArchivoCarpeta {
         this.nombreCodificado = nombreCodificado;
     }
 
-    public int getTamano() {
-        return tamano;
+    public String getTamaño() {
+        return tamaño;
     }
 
-    public void setTamano(int tamano) {
-        this.tamano = tamano;
+    public void setTamaño(String tamaño) {
+        this.tamaño = tamaño;
     }
 
-    public boolean isTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(boolean tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 }

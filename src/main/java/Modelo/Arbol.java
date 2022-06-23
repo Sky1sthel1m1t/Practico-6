@@ -16,8 +16,14 @@ public class Arbol<E> {
             raiz = nuevo;
             return;
         }
+
         Nodo<E> aux = buscar(idPadre);
         aux.getHijos().adicionar(nuevo);
+//        if (aux != null) {
+//
+//        } else {
+//            System.out.println("No se encontro el nodo");
+//        }
     }
 
     public Nodo<E> buscar(String id) {
@@ -37,7 +43,6 @@ public class Arbol<E> {
         raiz.dibujar(g, anchoTotal, 0, 10);
 
     }
-
 
     public static class Nodo<E> {
         private String id;

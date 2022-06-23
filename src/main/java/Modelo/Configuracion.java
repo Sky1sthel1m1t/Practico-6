@@ -2,16 +2,24 @@ package Modelo;
 
 public final class Configuracion {
     private static Configuracion instancia;
-    public String path;
+    private String path;
 
-    private Configuracion(String path) {
-        this.path = path;
+    private Configuracion() {
+
     }
 
-    public static Configuracion getInstance(String path){
-        if (instancia == null){
-            instancia = new Configuracion(path);
+    public static Configuracion getInstance() {
+        if (instancia == null) {
+            instancia = new Configuracion();
         }
         return instancia;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
