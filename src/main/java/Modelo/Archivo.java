@@ -4,13 +4,12 @@ import java.text.DecimalFormat;
 
 public class Archivo extends ArchivoCarpeta{
 
-    private String pathOriginal;
+    private String pathArchivoModificado;
 
-    public  Archivo(String nombreSucio, long tamaño, String pathOriginal) {
-        super();
+    public Archivo(String nombreSucio, long tamaño) {
         obtenerTipo(nombreSucio);
         calcularTamaño(tamaño);
-        this.pathOriginal = pathOriginal;
+        nombreArchivoCodificado();
     }
 
     public void obtenerTipo(String nombreSucio){
@@ -54,15 +53,38 @@ public class Archivo extends ArchivoCarpeta{
 
     }
 
+    private void nombreArchivoCodificado(){
+        String[] alfabeto = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v",
+                "w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","U",
+                "V","W","X","Y","Z"};
+
+        String codigo = "";
+
+        for (int i = 0; i < 6; i++) {
+            int num = (int) (Math.random() * alfabeto.length);
+            codigo += alfabeto[num];
+        }
+
+        codigo += ".";
+
+        for (int i = 0; i < 3; i++) {
+            int num = (int) (Math.random() * alfabeto.length);
+            codigo += alfabeto[num];
+        }
+
+        super.nombreCodificado = codigo;
+    }
+
+    public void guardarArchivo(String path){
+
+    }
+
     public String[] getDatos(){
         return new String[]{this.getNombre(), this.getTipo(), this.getTamaño(), this.getNombreCodificado()};
     }
 
-    public String getPathOriginal() {
-        return pathOriginal;
+    public String getNombreExtension(){
+        return super.nombre + "." + super.tipo;
     }
 
-    public void setPathOriginal(String pathOriginal) {
-        this.pathOriginal = pathOriginal;
-    }
 }

@@ -2,10 +2,12 @@ package Vista;
 
 import Modelo.Archivo;
 import Modelo.Carpeta;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 public class Ventana extends JFrame {
 
@@ -30,6 +32,13 @@ public class Ventana extends JFrame {
         JMenuItem configuracion = new JMenuItem("Ruta de Archivos");
 
         subirArchivo.addActionListener(e -> {
+
+            if (panel.getConfiguracion().getPath() == null){
+                JOptionPane.showMessageDialog(null ,"No se ha configurado una carpeta para guardar " +
+                        "los archivos temporales, por favor configure una");
+                cambiarRutaArchivosTemp();
+            }
+
             JFileChooser fc = new JFileChooser();
             fc.setCurrentDirectory(new File("."));
 
@@ -37,12 +46,26 @@ public class Ventana extends JFrame {
 
             if (respuesta == JFileChooser.APPROVE_OPTION){
                 File archivofc = new File(fc.getSelectedFile().getPath());
+                File archivoRaro = new File(panel.getConfiguracion().getPath());
 
                 String nombre = archivofc.getName();
                 long tamaño = archivofc.length();
-                String path = fc.getSelectedFile().getPath();
 
-                Archivo archivo = new Archivo(nombre, tamaño, path);
+                Archivo archivo = new Archivo(nombre, tamaño);
+
+                try {
+                    FileUtils.copyFileToDirectory(archivofc,archivoRaro);
+                } catch (IOException ex) {
+                    System.out.println("Error");
+                    throw new RuntimeException(ex);
+                }
+
+                String pathModificar = panel.getConfiguracion().getPath() + "\\" + nombre;
+                File aux = new File(pathModificar);
+                pathModificar = panel.getConfiguracion().getPath() + "\\" + archivo.getNombreCodificado();
+                File renombrar = new File(pathModificar);
+                aux.renameTo(renombrar);
+
                 panel.agregarArchivo(archivo);
             }
         });
@@ -59,19 +82,7 @@ public class Ventana extends JFrame {
 
         configuracion.addActionListener(e -> {
             if (panel.getConfiguracion().getPath() == null){
-                JOptionPane.showMessageDialog(null, "No se configurado una ruta, " +
-                        "especifique una ruta por favor");
-
-                JFileChooser fc = new JFileChooser(".");
-                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int respuesta = fc.showDialog(null, "Seleccionar");
-
-                if (respuesta == JFileChooser.APPROVE_OPTION){
-                    String path = fc.getSelectedFile().getPath();
-                    panel.getConfiguracion().setPath(path);
-                    JOptionPane.showMessageDialog(null, "Se ha configurado la ruta con exito");
-                }
-
+                cambiarRutaArchivosTemp();
             } else {
                 int respuesta = JOptionPane.showConfirmDialog(null, "Desea cambiar la ruta de guardado?");
 
@@ -98,6 +109,18 @@ public class Ventana extends JFrame {
         this.setJMenuBar(menuBar);
         this.add(panel, BorderLayout.CENTER);
         this.pack();
+    }
+
+    public void cambiarRutaArchivosTemp(){
+        JFileChooser fc = new JFileChooser(".");
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int respuesta = fc.showDialog(null, "Seleccionar");
+
+        if (respuesta == JFileChooser.APPROVE_OPTION){
+            String path = fc.getSelectedFile().getPath();
+            panel.getConfiguracion().setPath(path);
+            JOptionPane.showMessageDialog(null, "Se ha configurado la ruta con exito");
+        }
     }
 
 }

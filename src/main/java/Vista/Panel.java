@@ -112,6 +112,17 @@ public class Panel extends JPanel {
         }
     }
 
+    public void guardarArchivo(int fila){
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        int respuesta = fc.showOpenDialog(null);
+
+        if (respuesta == JFileChooser.APPROVE_OPTION){
+            File
+        }
+    }
+
     private void leerCarpeta(Arbol.Nodo<ArchivoCarpeta> nodo, Carpeta nuevaCarpetaActual) {
         Lista<Arbol.Nodo<ArchivoCarpeta>> hijos = nodo.getHijos();
 

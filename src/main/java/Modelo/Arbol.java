@@ -19,11 +19,6 @@ public class Arbol<E> {
 
         Nodo<E> aux = buscar(idPadre);
         aux.getHijos().adicionar(nuevo);
-//        if (aux != null) {
-//
-//        } else {
-//            System.out.println("No se encontro el nodo");
-//        }
     }
 
     public Nodo<E> buscar(String id) {
