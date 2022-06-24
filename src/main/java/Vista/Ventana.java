@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Ventana extends JFrame {
 
@@ -46,35 +48,42 @@ public class Ventana extends JFrame {
 
             if (respuesta == JFileChooser.APPROVE_OPTION){
                 File archivofc = new File(fc.getSelectedFile().getPath());
-                File archivoRaro = new File(panel.getConfiguracion().getPath());
 
                 String nombre = archivofc.getName();
                 long tamaño = archivofc.length();
 
                 Archivo archivo = new Archivo(nombre, tamaño);
 
+                String pathModificado = panel.getConfiguracion().getPath()+"\\"+archivo.getNombreCodificado();
+
+                File archivoRaro = new File(pathModificado);
+
                 try {
-                    FileUtils.copyFileToDirectory(archivofc,archivoRaro);
+                    FileUtils.copyFile(archivofc,archivoRaro);
                 } catch (IOException ex) {
-                    System.out.println("Error");
+                    JOptionPane.showMessageDialog(null, "No se pudo subir el archivo correctamente");
                     throw new RuntimeException(ex);
                 }
 
-                String pathModificar = panel.getConfiguracion().getPath() + "\\" + nombre;
-                File aux = new File(pathModificar);
-                pathModificar = panel.getConfiguracion().getPath() + "\\" + archivo.getNombreCodificado();
-                File renombrar = new File(pathModificar);
-                aux.renameTo(renombrar);
-
+                archivo.setPathArchivoModificado(pathModificado);
                 panel.agregarArchivo(archivo);
             }
         });
 
         crearCarpeta.addActionListener(e -> {
             String nombre = JOptionPane.showInputDialog(null,"Escriba el nombre de la carpeta");
+            String regex = "^\s*$";
+
+            Pattern patron = Pattern.compile(regex);
             if (nombre == null){
+                return;
+            }
+            Matcher m = patron.matcher(nombre);
+
+            if (m.find()){
                 JOptionPane.showMessageDialog(null, "Ese no es un nombre valido");
             } else {
+                nombre = nombre.trim();
                 Carpeta carpeta = new Carpeta(nombre);
                 panel.agregarCarpeta(carpeta);
             }

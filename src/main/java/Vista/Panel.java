@@ -1,6 +1,7 @@
 package Vista;
 
 import Modelo.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 
 public class Panel extends JPanel {
 
@@ -75,7 +77,7 @@ public class Panel extends JPanel {
                     if (tableModel.getValueAt(fila, 1) == "Carpeta") {
                         entrarCarpeta((String) tableModel.getValueAt(fila, 3));
                     } else {
-                        System.out.println("Archivo");
+                        guardarArchivo(fila);
                     }
                 }
             }
@@ -116,10 +118,24 @@ public class Panel extends JPanel {
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+        String id = (String) tableModel.getValueAt(fila, 3);
+        Arbol.Nodo<ArchivoCarpeta> nodo = arbol.buscar(id);
+        Archivo archivoRaro = (Archivo) nodo.getContenido();
+
         int respuesta = fc.showOpenDialog(null);
 
         if (respuesta == JFileChooser.APPROVE_OPTION){
-            File
+            File archivoCambiar = new File(archivoRaro.getPathArchivoModificado());
+            File archivoOriginal = new File(fc.getSelectedFile().getPath()+ "\\" + archivoRaro.getNombreExtension());
+
+            try {
+                FileUtils.copyFile(archivoCambiar,archivoOriginal);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Hubo un problema al guardar el archivo");
+                throw new RuntimeException(e);
+            }
+
+            JOptionPane.showMessageDialog(null, "Se logró guardar el archivo con éxito");
         }
     }
 

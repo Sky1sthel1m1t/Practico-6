@@ -35,7 +35,7 @@ public class Archivo extends ArchivoCarpeta{
         double valor;
         DecimalFormat formato = new DecimalFormat("#.00");
 
-        if ((tamaño > Math.pow(2,0)) && (tamaño < Math.pow(2,10))){
+        if ((tamaño > 0) && (tamaño < Math.pow(2,10))){
 
             super.tamaño = tamaño + " B";
 
@@ -75,10 +75,6 @@ public class Archivo extends ArchivoCarpeta{
         super.nombreCodificado = codigo;
     }
 
-    public void guardarArchivo(String path){
-
-    }
-
     public String[] getDatos(){
         return new String[]{this.getNombre(), this.getTipo(), this.getTamaño(), this.getNombreCodificado()};
     }
@@ -87,4 +83,11 @@ public class Archivo extends ArchivoCarpeta{
         return super.nombre + "." + super.tipo;
     }
 
+    public String getPathArchivoModificado() {
+        return pathArchivoModificado;
+    }
+
+    public void setPathArchivoModificado(String pathArchivoModificado) {
+        this.pathArchivoModificado = pathArchivoModificado;
+    }
 }
